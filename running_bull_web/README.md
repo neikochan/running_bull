@@ -25,11 +25,11 @@ PUBLIC_URL=http://127.0.0.1:3000 python3 server.py
 
 ## 二、操作
 
-| | 电脑 | 手机 |
-|---|---|---|
-| 换道 | ↑ / ↓ 或 W / S | 上下滑动 |
-| 跳 | J 或 空格 | 点右半屏 / 右下角「跳」 |
-| 滑铲 | K | 点左半屏 / 左下角「滑」 |
+|      | 电脑           | 手机                    |
+| ---- | -------------- | ----------------------- |
+| 换道 | ↑ / ↓ 或 W / S | 上下滑动                |
+| 跳   | J 或 空格      | 点右半屏 / 右下角「跳」 |
+| 滑铲 | K              | 点左半屏 / 左下角「滑」 |
 
 - 低栏、石堆要**跳**；高栏要**滑**过去；草垛、木箱要**换道**躲开
 - 低栏 / 高栏是前后两片的斜透视画法，牛夹在中间，能看出是从栏上跳过、从横梁下钻过
@@ -102,12 +102,12 @@ python3 server.py
 
 公众号网页授权的代码还留在服务器上，默认关闭，竖屏页没有「微信登录」按钮。不配下面的环境变量时，`GET /api/wechat/start` 返回 503。这不是当前的登录方式。
 
-| 变量 | 作用 |
-|---|---|
-| `WECHAT_APP_ID` | 公众号 AppID。不填则微信接口关闭 |
-| `WECHAT_APP_SECRET` | 公众号 AppSecret，只放在服务器的 `deploy/env` |
+| 变量                  | 作用                                                           |
+| --------------------- | -------------------------------------------------------------- |
+| `WECHAT_APP_ID`       | 公众号 AppID。不填则微信接口关闭                               |
+| `WECHAT_APP_SECRET`   | 公众号 AppSecret，只放在服务器的 `deploy/env`                  |
 | `WECHAT_REDIRECT_URI` | 授权回调，默认 `https://bull.lingecho.com/api/wechat/callback` |
-| `WECHAT_OAUTH_SCOPE` | 默认 `snsapi_userinfo` |
+| `WECHAT_OAUTH_SCOPE`  | 默认 `snsapi_userinfo`                                         |
 
 `GET /api/wechat/config` 只返回是否启用和 scope，不返回 AppSecret。页面不会因为这个接口去跳转微信。
 
@@ -177,28 +177,28 @@ sudo nginx -t && sudo systemctl reload nginx
 - 出错返回 `{"error": "中文说明"}`，HTTP 状态码：400 参数错、401 没账号、402 金币不够、404 不存在、409 状态冲突
 - 已开启 CORS（`Access-Control-Allow-Origin: *`），别的网页 / 客户端可以直接调用
 
-| 方法 | 路径 | 请求体 | 返回 |
-|---|---|---|---|
-| GET | `/health` | – | `{ok, db}` |
-| GET | `/catalog` | – | 角色、地图、道具、充值档位、规则（价格以这里为准） |
-| POST | `/guest` | `{device_id, nickname?, invite_code?, client_hint?}` | `{created, invite, user}`；新设备才会处理邀请码。`client_hint` 只写入该账号，不用于查找 |
-| GET | `/me` | – | `{user}` |
-| POST | `/me/nickname` | `{nickname}` | `{user}` |
-| POST | `/me/equip` | `{item_id}` | `{user}`，只能装备已拥有的角色 / 地图 |
-| POST | `/shop/buy` | `{item_id, qty?}` | `{user}`；角色 / 地图买了自动装备，道具可买多个 |
-| POST | `/topup` | `{package_id}` | `{order_id, mock:true, coins_added, user}`（示意） |
-| POST | `/runs` | `{use_shield?, use_double?}` | `{run_id, shield, double, user}`，开局并扣掉用到的道具 |
-| POST | `/ads` | `{run_id}` | `{ad_id, seconds, mock:true}`，开始看示意广告 |
-| POST | `/runs/{run_id}/revive` | `{method:"ad", ad_id}` 或 `{method:"coins"}` | `{ok, user}`；每局一次 |
-| POST | `/runs/{run_id}/finish` | `{score, coins, board?, mode?, hero?, distance?, play_ms?}` | `{score, earned, capped, new_record, rank, portrait_best, user}`。`board:"portrait"` 时把本局分数、距离、时长、角色、地图写入 `runs`，金币入账，**不**更新全服 `best`。竖屏分数有单独的每秒上限。不带 `board` 时按横版规则，并记 `board=landscape` |
-| GET | `/history?board=portrait&limit=20` | – | `{board, best, portrait_best, runs:[{id, score, coins, started_at, ended_at, board, mode, hero, distance, play_ms}]}` 当前账号的对局，存在数据库里 |
-| GET | `/wechat/config` | – | `{enabled, scope, reason}` 不返回密钥 |
-| GET | `/wechat/start` | – | 已配置则跳到微信；未配置 503 |
-| GET | `/wechat/callback` | – | 微信回调，成功后回到 `/mobile-web/` |
-| POST | `/wechat/logout` | – | 清除 `rb_session` |
-| GET | `/leaderboard` | – | `{top:[{rank, id, nickname, best, equipped_char}]}` 前 20，横版 `users.best` |
-| GET | `/portrait/leaderboard?metric=score\|coins\|distance&limit=20` | – | `{metric, board:"portrait", top:[{rank, id, nickname, value, me}], me:{id, nickname, value, rank}}`。value 是已结算竖屏对局的累计，分别对应总积分、总金币、总距离 |
-| GET | `/invite` | – | `{code, link, count, earned, reward_inviter, reward_invitee}`，`link` = `PUBLIC_URL/?invite=邀请码` |
+| 方法 | 路径                                                           | 请求体                                                      | 返回                                                                                                                                                                                                                                               |
+| ---- | -------------------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET  | `/health`                                                      | –                                                           | `{ok, db}`                                                                                                                                                                                                                                         |
+| GET  | `/catalog`                                                     | –                                                           | 角色、地图、道具、充值档位、规则（价格以这里为准）                                                                                                                                                                                                 |
+| POST | `/guest`                                                       | `{device_id, nickname?, invite_code?, client_hint?}`        | `{created, invite, user}`；新设备才会处理邀请码。`client_hint` 只写入该账号，不用于查找                                                                                                                                                            |
+| GET  | `/me`                                                          | –                                                           | `{user}`                                                                                                                                                                                                                                           |
+| POST | `/me/nickname`                                                 | `{nickname}`                                                | `{user}`                                                                                                                                                                                                                                           |
+| POST | `/me/equip`                                                    | `{item_id}`                                                 | `{user}`，只能装备已拥有的角色 / 地图                                                                                                                                                                                                              |
+| POST | `/shop/buy`                                                    | `{item_id, qty?}`                                           | `{user}`；角色 / 地图买了自动装备，道具可买多个                                                                                                                                                                                                    |
+| POST | `/topup`                                                       | `{package_id}`                                              | `{order_id, mock:true, coins_added, user}`（示意）                                                                                                                                                                                                 |
+| POST | `/runs`                                                        | `{use_shield?, use_double?}`                                | `{run_id, shield, double, user}`，开局并扣掉用到的道具                                                                                                                                                                                             |
+| POST | `/ads`                                                         | `{run_id}`                                                  | `{ad_id, seconds, mock:true}`，开始看示意广告                                                                                                                                                                                                      |
+| POST | `/runs/{run_id}/revive`                                        | `{method:"ad", ad_id}` 或 `{method:"coins"}`                | `{ok, user}`；每局一次                                                                                                                                                                                                                             |
+| POST | `/runs/{run_id}/finish`                                        | `{score, coins, board?, mode?, hero?, distance?, play_ms?}` | `{score, earned, capped, new_record, rank, portrait_best, user}`。`board:"portrait"` 时把本局分数、距离、时长、角色、地图写入 `runs`，金币入账，**不**更新全服 `best`。竖屏分数有单独的每秒上限。不带 `board` 时按横版规则，并记 `board=landscape` |
+| GET  | `/history?board=portrait&limit=20`                             | –                                                           | `{board, best, portrait_best, runs:[{id, score, coins, started_at, ended_at, board, mode, hero, distance, play_ms}]}` 当前账号的对局，存在数据库里                                                                                                 |
+| GET  | `/wechat/config`                                               | –                                                           | `{enabled, scope, reason}` 不返回密钥                                                                                                                                                                                                              |
+| GET  | `/wechat/start`                                                | –                                                           | 已配置则跳到微信；未配置 503                                                                                                                                                                                                                       |
+| GET  | `/wechat/callback`                                             | –                                                           | 微信回调，成功后回到 `/mobile-web/`                                                                                                                                                                                                                |
+| POST | `/wechat/logout`                                               | –                                                           | 清除 `rb_session`                                                                                                                                                                                                                                  |
+| GET  | `/leaderboard`                                                 | –                                                           | `{top:[{rank, id, nickname, best, equipped_char}]}` 前 20，横版 `users.best`                                                                                                                                                                       |
+| GET  | `/portrait/leaderboard?metric=score\|coins\|distance&limit=20` | –                                                           | `{metric, board:"portrait", top:[{rank, id, nickname, value, me}], me:{id, nickname, value, rank}}`。value 是已结算竖屏对局的累计，分别对应总积分、总金币、总距离                                                                                  |
+| GET  | `/invite`                                                      | –                                                           | `{code, link, count, earned, reward_inviter, reward_invitee}`，`link` = `PUBLIC_URL/?invite=邀请码`                                                                                                                                                |
 
 `user` 对象：`{id, nickname, coins, best, invite_code, equipped_char, equipped_bg, owned:[...], consumables:{shield, double}, invited_count, invite_earned}`
 
@@ -210,29 +210,29 @@ sudo nginx -t && sudo systemctl reload nginx
 
 换设备 / 在 XBuilder 里也能用同一个账号。PIN 用 PBKDF2-SHA256（6 万次、随机盐）存储；同一昵称连错 5 次锁 10 分钟（429），同一 IP 10 分钟内失败 30 次也会被限流。登录后拿到 `token`（30 天有效），之后请求带请求头 `X-Session: <token>`（或 body 里的 `token`）。
 
-| 方法 路径 | 请求 | 说明 |
-|---|---|---|
-| POST /api/account/register | `{nickname, pin}` | 新建账号（送 100 金币），返回 token；昵称已占用 409 |
-| POST /api/account/login | `{nickname, pin}` | 昵称不区分大小写；不存在 404，PIN 错 403（带剩余次数），锁定 429 |
-| POST /api/account/set_pin | `{nickname, pin}` + X-Device-Id | 网页游客给自己的存档设昵称 + PIN（之后可在别处登录同一存档） |
-| POST /api/account/logout | X-Session | 注销当前 token |
-| POST /api/account/delete | `{pin}` + X-Session | 删除账号及其全部数据（要 PIN 确认） |
+| 方法 路径                  | 请求                            | 说明                                                             |
+| -------------------------- | ------------------------------- | ---------------------------------------------------------------- |
+| POST /api/account/register | `{nickname, pin}`               | 新建账号（送 100 金币），返回 token；昵称已占用 409              |
+| POST /api/account/login    | `{nickname, pin}`               | 昵称不区分大小写；不存在 404，PIN 错 403（带剩余次数），锁定 429 |
+| POST /api/account/set_pin  | `{nickname, pin}` + X-Device-Id | 网页游客给自己的存档设昵称 + PIN（之后可在别处登录同一存档）     |
+| POST /api/account/logout   | X-Session                       | 注销当前 token                                                   |
+| POST /api/account/delete   | `{pin}` + X-Session             | 删除账号及其全部数据（要 PIN 确认）                              |
 
 ### 7.2 XBuilder 版专用接口 /api/xb/（v5 新增，返回扁平 JSON，方便 spx 解析）
 
 所有 /api/xb/ 接口都是 POST + JSON（profile、top 也支持 GET），出错时 HTTP 状态码照常（400/401/402/409…），body 为 `{ok:false, err:"中文原因", code:状态码}`。成功时都带一份玩家资料：
 `{ok:true, nick, wallet, best, chars(位掩码 1=大角牛 2=粉粉猪 4=咩咩羊), maps(位掩码 1=农场 2=沙漠 4=夜晚), char, map, shield, double, prices[8], revive_cost}`。
 
-| 路径 | 请求 | 说明 |
-|---|---|---|
-| /api/xb/register、/api/xb/login | `{nick, pin}` | 同上，另返回 `token` |
-| /api/xb/profile | — | 当前资料 |
-| /api/xb/buy | `{item: 0..7}` | 0-2 角色、3-5 地图、6 护盾、7 双倍；已拥有的角色/地图 = 装备（`bought:false`）；金币不够 402；道具最多持有 3 个 409 |
-| /api/xb/start | — | 开一局，自动使用护盾/双倍各 1 个，返回 `run, run_shield, run_double` |
-| /api/xb/ad | `{run}` | 开始看示意广告，返回 `ad, seconds` |
-| /api/xb/revive | `{run, method:"coins"}` 或 `{run, method:"ad", ad}` | 每局只能复活 1 次；金币复活 100；广告要看满 3 秒 |
-| /api/xb/finish | `{run, score, coins}` | coins 填本局捡到的原始数量（双倍由服务器计算）；按真实时长封顶防作弊；返回 `score, earned, capped, new_record, rank` |
-| /api/xb/top | — | `{text}`：前 10 名，已排好版的多行文字 |
+| 路径                            | 请求                                                | 说明                                                                                                                 |
+| ------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| /api/xb/register、/api/xb/login | `{nick, pin}`                                       | 同上，另返回 `token`                                                                                                 |
+| /api/xb/profile                 | —                                                   | 当前资料                                                                                                             |
+| /api/xb/buy                     | `{item: 0..7}`                                      | 0-2 角色、3-5 地图、6 护盾、7 双倍；已拥有的角色/地图 = 装备（`bought:false`）；金币不够 402；道具最多持有 3 个 409  |
+| /api/xb/start                   | —                                                   | 开一局，自动使用护盾/双倍各 1 个，返回 `run, run_shield, run_double`                                                 |
+| /api/xb/ad                      | `{run}`                                             | 开始看示意广告，返回 `ad, seconds`                                                                                   |
+| /api/xb/revive                  | `{run, method:"coins"}` 或 `{run, method:"ad", ad}` | 每局只能复活 1 次；金币复活 100；广告要看满 3 秒                                                                     |
+| /api/xb/finish                  | `{run, score, coins}`                               | coins 填本局捡到的原始数量（双倍由服务器计算）；按真实时长封顶防作弊；返回 `score, earned, capped, new_record, rank` |
+| /api/xb/top                     | —                                                   | `{text}`：前 10 名，已排好版的多行文字                                                                               |
 
 XBuilder 版的角色（粉粉猪 300、咩咩羊 600）只在 XBuilder 版用，装备记录在单独的 xb_prefs 表，不影响网页版；地图和道具与网页版共用。新表 accounts / sessions / xb_prefs 在服务启动时自动 `CREATE TABLE IF NOT EXISTS`，只增不改。
 
@@ -248,3 +248,6 @@ tests/smoke_test.py  接口冒烟测试
 tools/make_assets.py 从 XBuilder 版复制素材并生成换色角色、地图、护盾图标（需要 Pillow + numpy）
 screenshots/         测试截图
 ```
+
+## 九、线上运行竖版
+https://bull.lingecho.com/mobile-web/
